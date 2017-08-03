@@ -20,7 +20,7 @@ namespace GeoWar
         /// the isUpdating and addedEntities variables are used to handle the
         /// creation of new entities while the update method is running. If we try
         /// to update the entities list while iterating through it. we will get 
-        /// an exception. 
+        /// an exception.
         /// 
         /// So to get around this we will instead store any of the newly 
         /// generated entities into the addedEntities list first and then
