@@ -6,9 +6,10 @@
     <SharedGUID>76ecb4dd-2025-4a96-9972-e1001a466845</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>GeoWar.Shared</Import_RootNamespace>
+    <Import_RootNamespace>GeoWar</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameRoot.cs" />
   </ItemGroup>
 </Project>

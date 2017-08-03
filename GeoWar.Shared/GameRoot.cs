@@ -10,7 +10,6 @@ namespace GeoWar
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont font;
 
         public GameRoot()
         {
@@ -41,7 +40,6 @@ namespace GeoWar
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            font = Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -75,7 +73,6 @@ namespace GeoWar
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "hello world", new Vector2(200, 200), Color.Black);
             spriteBatch.End();
             base.Draw(gameTime);
         }
