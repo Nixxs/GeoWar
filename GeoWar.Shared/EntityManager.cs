@@ -100,7 +100,7 @@ namespace GeoWar
             // essentially we are removing all the entities that have been destroyed
             // since these entities are no longer in the entities list, thier update
             // and draw methods will no longer be called, c# will automatically destroy them
-            entities = entities.Where(entity => entity.IsExpired = false).ToList();
+            entities = entities.Where(entity => entity.IsExpired == false).ToList();
         }
 
         /// <summary>

@@ -53,9 +53,11 @@ namespace GeoWar
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            // load the base initialize first
             base.Initialize();
+
+            // all other initializations come after base
+            EntityManager.Add(PlayerShip.Instance);
         }
 
         /// <summary>
@@ -87,8 +89,8 @@ namespace GeoWar
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
-
+            EntityManager.Update();
+            
             base.Update(gameTime);
         }
 
@@ -98,11 +100,13 @@ namespace GeoWar
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            // look up what spritesort and blendstate do then add documentation here
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
+                EntityManager.Draw(spriteBatch);
             spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
