@@ -22,11 +22,11 @@ namespace GeoWar
         /// <param name="game"></param>
         public static void Load(GameRoot instance)
         {
-            _player = instance.Content.Load<Texture2D>("Player");
-            _seeker = instance.Content.Load<Texture2D>("Seeker");
-            _wanderer = instance.Content.Load<Texture2D>("Wanderer");
-            _bullet = instance.Content.Load<Texture2D>("Bullet");
-            _pointer = instance.Content.Load<Texture2D>("Pointer");
+            _player = instance.Content.Load<Texture2D>("Art\\Player");
+            _seeker = instance.Content.Load<Texture2D>("Art\\Seeker");
+            _wanderer = instance.Content.Load<Texture2D>("Art\\Wanderer");
+            _bullet = instance.Content.Load<Texture2D>("Art\\Bullet");
+            _pointer = instance.Content.Load<Texture2D>("Art\\Pointer");
         }
 
         public static Texture2D Player
