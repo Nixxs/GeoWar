@@ -21,7 +21,7 @@ namespace GeoWar
         public float Radius = 20; // used for circular collision detection
         public bool IsExpired; // true if the entity was destroyed and should be deleted
 
-        // if the image has be set then the size of the object is equal to the image size
+        // if the image has been set then the size of the object is equal to the image size
         // otherwise size will be zero
         public Vector2 Size
         {
@@ -42,10 +42,13 @@ namespace GeoWar
         }
 
         // all entities must have an Update method defined that returns nothing
+        // but each child entity can implement this update method differently
+        // it just must have this as a method to be valid
         public abstract void Update();
 
         // a virtual method that can be redefined by the child entity, its kind of 
         // like a default method for the child if no other "Draw" method is defined
+        // then this one is given to it
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(image, Position, null, color, Orientation, Size / 2f, 1f, SpriteEffects.None, 0);

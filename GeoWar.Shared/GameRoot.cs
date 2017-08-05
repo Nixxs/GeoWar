@@ -10,11 +10,39 @@ namespace GeoWar
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public static GameRoot _instance;
 
         public GameRoot()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _instance = this;  
+        }
+
+        /// <summary>
+        /// A helpful property that returns a reference to this gameroot object, this will be
+        /// used when classes need a reference to the instance. eg Art will need access to this
+        /// object's content.
+        /// </summary>
+        public static GameRoot Instance
+        {
+            get { return _instance; }
+        }
+
+        /// <summary>
+        /// A reference to this object's Viewport
+        /// </summary>
+        public static Viewport Viewport
+        {
+            get { return Instance.GraphicsDevice.Viewport; }
+        }
+
+        /// <summary>
+        /// The screen size of this object's viewport
+        /// </summary>
+        public static Vector2 ScreenSize
+        {
+            get { return new Vector2(Viewport.Width, Viewport.Height); }
         }
 
         /// <summary>
@@ -40,7 +68,8 @@ namespace GeoWar
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-        }
+            Art.Load(Instance);
+         }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload

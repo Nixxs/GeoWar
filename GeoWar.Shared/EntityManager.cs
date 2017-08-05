@@ -97,6 +97,9 @@ namespace GeoWar
             // remove any expired entities
             // redefine the entities list to only the entities within the list that 
             // have an "IsExpired" attribute of "false" (Where uses the System.Linq library)
+            // essentially we are removing all the entities that have been destroyed
+            // since these entities are no longer in the entities list, thier update
+            // and draw methods will no longer be called, c# will automatically destroy them
             entities = entities.Where(entity => entity.IsExpired = false).ToList();
         }
 
