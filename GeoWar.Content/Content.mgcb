@@ -73,3 +73,10 @@
 /processorParam:TextureFormat=Color
 /build:Art/Wanderer.png
 
+#begin debugText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:debugText.spritefont
+

@@ -10,7 +10,12 @@ namespace GeoWar
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
         public static GameRoot _instance;
+
+        // DEBUG CODE
+        private SpriteFont debugTextFont;
+        // DEBUG CODE
 
         public GameRoot()
         {
@@ -71,7 +76,11 @@ namespace GeoWar
 
             // TODO: use this.Content to load your game content here
             Art.Load(Instance);
-         }
+
+            // DEBUG CODE
+            debugTextFont = Content.Load<SpriteFont>("debugText");
+            // DEBUG CODE
+        }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -90,6 +99,7 @@ namespace GeoWar
         protected override void Update(GameTime gameTime)
         {
             EntityManager.Update();
+            Input.Update();
             
             base.Update(gameTime);
         }
@@ -102,9 +112,12 @@ namespace GeoWar
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // look up what spritesort and blendstate do then add documentation here
+            // the sort mode of texture uses the default deferred mode where sprites are drawn in the
+            // order that they are called but ordered by texture first (don't really understand what that means though)
+            // blendstate of additive adds the destination data to the source data without using alpha its how overlapping
+            // textures are blended together
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
-                EntityManager.Draw(spriteBatch);
+            EntityManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
