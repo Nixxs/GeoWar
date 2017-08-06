@@ -101,6 +101,8 @@ namespace GeoWar
             // since these entities are no longer in the entities list, thier update
             // and draw methods will no longer be called, c# will automatically destroy them
             entities = entities.Where(entity => entity.IsExpired == false).ToList();
+            // consider manually destroying these expired entity objects just for good
+            // practice, rather than leaving it to the c# run time to do.
         }
 
         /// <summary>

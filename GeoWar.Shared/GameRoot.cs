@@ -63,6 +63,10 @@ namespace GeoWar
 
             // all other initializations come after base
             EntityManager.Add(PlayerShip.Instance);
+
+            //DEBUG CODE
+            Instance.IsMouseVisible = true;
+            //DEBUG CODE
         }
 
         /// <summary>
@@ -98,9 +102,9 @@ namespace GeoWar
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            EntityManager.Update();
             Input.Update();
-            
+            EntityManager.Update();
+
             base.Update(gameTime);
         }
 
@@ -118,6 +122,20 @@ namespace GeoWar
             // textures are blended together
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
+
+            // DEBUG CODE
+            if (Input.isAimingWithMouse)
+            {
+                spriteBatch.DrawString(debugTextFont, "mouse aim", new Vector2(200,200), Color.White);  
+            }
+            else if (Input.isAimingWithKeyboard)
+            {
+                spriteBatch.DrawString(debugTextFont, "keyboard aim", new Vector2(200, 200), Color.White);
+            }
+
+            spriteBatch.DrawString(debugTextFont, string.Format("Aim: {0}\nMove: {1}", Input.GetAimDirection(),  Input.GetMovementDirection()), new Vector2(200, 220), Color.White);
+            // DEBUG CODE
+
             spriteBatch.End();
 
             base.Draw(gameTime);
