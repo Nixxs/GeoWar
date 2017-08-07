@@ -133,7 +133,8 @@ namespace GeoWar
                 spriteBatch.DrawString(debugTextFont, "keyboard aim", new Vector2(200, 200), Color.White);
             }
 
-            spriteBatch.DrawString(debugTextFont, string.Format("Aim: {0}\nMove: {1}", Input.GetAimDirection(),  Input.GetMovementDirection()), new Vector2(200, 220), Color.White);
+            spriteBatch.DrawString(debugTextFont, string.Format("Aim: {0}\nMove: {1}\nOrientation: {2}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation), new Vector2(200, 220), Color.White);
+            
             // DEBUG CODE
 
             spriteBatch.End();
