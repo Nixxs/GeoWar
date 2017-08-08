@@ -99,7 +99,7 @@ namespace GeoWar
         protected override void Update(GameTime gameTime)
         {
             Input.Update();
-            EntityManager.Update();
+            EntityManager.Update(gameTime);
 
             base.Update(gameTime);
         }

@@ -67,7 +67,7 @@ namespace GeoWar
         /// The Update method runs through all the entities in the entities list
         /// and runs thier respective update methods.
         /// </summary>
-        public static void Update()
+        public static void Update(GameTime gameTime)
         {
             // set this to true as soon as we start running just before running through
             // the entities list to run all the update methods
@@ -78,7 +78,7 @@ namespace GeoWar
             // we don't want to update it here so we are using the foreach
             foreach (Entity entity in entities)
             {
-                entity.Update();
+                entity.Update(gameTime);
             }
 
             // set back to false after running all the update methods

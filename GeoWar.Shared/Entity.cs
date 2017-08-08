@@ -44,7 +44,7 @@ namespace GeoWar
         // all entities must have an Update method defined that returns nothing
         // but each child entity can implement this update method differently
         // it just must have this as a method to be valid
-        public abstract void Update();
+        public abstract void Update(GameTime gameTime);
 
         // a virtual method that can be redefined by the child entity, its kind of 
         // like a default method for the child if no other "Draw" method is defined

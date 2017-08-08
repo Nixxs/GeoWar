@@ -43,12 +43,12 @@ namespace GeoWar
             Radius = 10;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             // need to consider changing this to use time instead of update cycles
             // eg velocity needs to be distance/second instead of distance per update cycle
-            const float speed = 8; // speed is the multiplier for the movement direction
-            Velocity = speed * Input.GetMovementDirection(); // velocity is the final delta value to move the player from his current position to his new position between update cycles
+            const float speed = 600; // speed is the multiplier for the movement direction
+            Velocity = (speed * (float)gameTime.ElapsedGameTime.TotalSeconds) * Input.GetMovementDirection(); // velocity is the final delta value to move the player from his current position to his new position between update cycles
             Position += Velocity;
             // this is a smart way to limit the movement of the ship to the inside of the screen extents
             // the other way to do this is to set the max x max y etc.. and reset the position of the player
@@ -77,7 +77,7 @@ namespace GeoWar
                 Quaternion aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle); // a quanternion is used for determining orientation in a 3D space and is required by the vector2 transform method
 
                 float randomSpread = rand.NextFloat(-0.4f, 0.4f); // generate some variability in the bullet angle to give it a machinegun effect
-                Vector2 bulletVelocity = MathUtil.FromPolar(aimAngle + randomSpread, 11f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
+                Vector2 bulletVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathUtil.FromPolar(aimAngle + randomSpread, 600f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
 
                 // the starting position of the bullet is the position of the player ship plus an offset of 25pix in the x axis  
                 // and 8 pix in the y axis but oriented in the aim direction of the player 

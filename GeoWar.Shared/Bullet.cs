@@ -16,7 +16,7 @@ namespace GeoWar
             Radius = 8;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             // orientation is updated each frame as long as the bullet is still moving
             if (Velocity.LengthSquared() > 0)
