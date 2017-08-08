@@ -8,6 +8,9 @@ namespace GeoWar
     class PlayerShip : Entity
     {
         private static PlayerShip _instance;
+        const int cooldownFrames = 6; //number of frames to wait before player can shoot again
+        int cooldownRemaining = 0; // keep track of how many frames has past since last shot
+        static Random rand = new Random(); // need this to generate random floats
 
         // if the player instance property hasn't already been created then create one
         // and return that value, otherwise just return the object that had been assigned
@@ -60,7 +63,39 @@ namespace GeoWar
             {
                 Orientation = Velocity.ToAngle();
             }
-            
+
+            Vector2 aim = Input.GetAimDirection();
+
+            // if the player is aiming in a direction and there is no cooldown left on shooting then
+            // create bullets objects, we can also add in a requirement for a button down here as well
+            // at the moment as long as the player has an aim button pushed (arrow keys, mouse movement, thumbstick)
+            // then we will shoot.
+            if (aim.LengthSquared() > 0 && cooldownRemaining <= 0)
+            {
+                cooldownRemaining = cooldownFrames; // reset the cooldown remaining to full cd
+                float aimAngle = aim.ToAngle(); // get the angle that the bullets should be moving in
+                Quaternion aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle); // a quanternion is used for determining orientation in a 3D space and is required by the vector2 transform method
+
+                float randomSpread = rand.NextFloat(-0.4f, 0.4f); // generate some variability in the bullet angle to give it a machinegun effect
+                Vector2 bulletVelocity = MathUtil.FromPolar(aimAngle + randomSpread, 11f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
+
+                // the starting position of the bullet is the position of the player ship plus an offset of 25pix in the x axis  
+                // and 8 pix in the y axis but oriented in the aim direction of the player 
+                // B   B
+                //   P
+                // this tutorial code is something i don;t really understand the math for yet
+                Vector2 offset = Vector2.Transform(new Vector2(25, 8), aimQuat);
+                EntityManager.Add(new Bullet(Position + offset, bulletVelocity));
+
+                offset = Vector2.Transform(new Vector2(25, -8), aimQuat);
+                EntityManager.Add(new Bullet(Position + offset, bulletVelocity));
+            }
+
+            // reduce the cooldown remaining by 1 frame
+            if (cooldownRemaining > 0)
+            {
+                cooldownRemaining -= 1;
+            }
         }
     }
 }

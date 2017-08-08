@@ -63,10 +63,6 @@ namespace GeoWar
 
             // all other initializations come after base
             EntityManager.Add(PlayerShip.Instance);
-
-            //DEBUG CODE
-            Instance.IsMouseVisible = true;
-            //DEBUG CODE
         }
 
         /// <summary>
@@ -122,6 +118,7 @@ namespace GeoWar
             // textures are blended together
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
+            spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
 
             // DEBUG CODE
             if (Input.isAimingWithMouse)
