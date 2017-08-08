@@ -19,7 +19,7 @@ namespace GeoWar
         // since we want the mouse icon to disappear when its not being used
         // not moved since the last update
         public static bool isAimingWithMouse = false;
-        public static bool isAimingWithKeyboard = false;
+        private static bool isAimingWithKeyboard = false;
         private static bool isAimingWithGamepad = false;
 
         // these are the keyboard controls for aiming, we need this list to track whether

@@ -127,8 +127,12 @@ namespace GeoWar
             // textures are blended together
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
-            spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
 
+            // draw the mouse pointer if the player is aiming with the mouse
+            if (Input.isAimingWithMouse == true)
+            {
+                spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
+            }
 
             // DEBUG CODE
             string aimMode = Input.isAimingWithMouse ? "Mouse Aim" : "Keyboard aim";
