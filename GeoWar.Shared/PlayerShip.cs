@@ -8,8 +8,8 @@ namespace GeoWar
     class PlayerShip : Entity
     {
         private static PlayerShip _instance;
-        const int cooldownFrames = 6; //number of frames to wait before player can shoot again
-        int cooldownRemaining = 0; // keep track of how many frames has past since last shot
+        const float shootCooldown = 120; //number of milli seconds between shots
+        float cooldownRemaining = 0; // keep track of how many frames has past since last shot
         static Random rand = new Random(); // need this to generate random floats
 
         // if the player instance property hasn't already been created then create one
@@ -47,7 +47,7 @@ namespace GeoWar
         {
             // need to consider changing this to use time instead of update cycles
             // eg velocity needs to be distance/second instead of distance per update cycle
-            const float speed = 600; // speed is the multiplier for the movement direction
+            const float speed = 500; // speed is the multiplier for the movement direction
             Velocity = (speed * (float)gameTime.ElapsedGameTime.TotalSeconds) * Input.GetMovementDirection(); // velocity is the final delta value to move the player from his current position to his new position between update cycles
             Position += Velocity;
             // this is a smart way to limit the movement of the ship to the inside of the screen extents
@@ -70,13 +70,13 @@ namespace GeoWar
             // create bullets objects, we can also add in a requirement for a button down here as well
             // at the moment as long as the player has an aim button pushed (arrow keys, mouse movement, thumbstick)
             // then we will shoot.
-            if (aim.LengthSquared() > 0 && cooldownRemaining <= 0)
+            if (aim.LengthSquared() > 0 && cooldownRemaining <= 0 && gameTime.TotalGameTime.TotalMilliseconds >= 500)
             {
-                cooldownRemaining = cooldownFrames; // reset the cooldown remaining to full cd
+                cooldownRemaining = shootCooldown; // reset the cooldown remaining to full cd
                 float aimAngle = aim.ToAngle(); // get the angle that the bullets should be moving in
                 Quaternion aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle); // a quanternion is used for determining orientation in a 3D space and is required by the vector2 transform method
 
-                float randomSpread = rand.NextFloat(-0.4f, 0.4f); // generate some variability in the bullet angle to give it a machinegun effect
+                float randomSpread = rand.NextFloat(-0.3f, 0.3f); // generate some variability in the bullet angle to give it a machinegun effect
                 Vector2 bulletVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathUtil.FromPolar(aimAngle + randomSpread, 600f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
 
                 // the starting position of the bullet is the position of the player ship plus an offset of 25pix in the x axis  
@@ -94,7 +94,7 @@ namespace GeoWar
             // reduce the cooldown remaining by 1 frame
             if (cooldownRemaining > 0)
             {
-                cooldownRemaining -= 1;
+                cooldownRemaining -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
         }
     }

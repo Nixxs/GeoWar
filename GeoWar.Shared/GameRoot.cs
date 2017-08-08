@@ -19,9 +19,18 @@ namespace GeoWar
 
         public GameRoot()
         {
+            _instance = this;
+
+            // here we define the screen
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.IsFullScreen = true;
+
             Content.RootDirectory = "Content";
-            _instance = this;  
+
+            // these are to unlink it from MonoGame's default frame rate and to use variable timesteps for update cycles
+            Instance.IsFixedTimeStep = false;
         }
 
         /// <summary>
@@ -120,18 +129,10 @@ namespace GeoWar
             EntityManager.Draw(spriteBatch);
             spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
 
-            // DEBUG CODE
-            if (Input.isAimingWithMouse)
-            {
-                spriteBatch.DrawString(debugTextFont, "mouse aim", new Vector2(200,200), Color.White);  
-            }
-            else if (Input.isAimingWithKeyboard)
-            {
-                spriteBatch.DrawString(debugTextFont, "keyboard aim", new Vector2(200, 200), Color.White);
-            }
 
-            spriteBatch.DrawString(debugTextFont, string.Format("Aim: {0}\nMove: {1}\nOrientation: {2}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation), new Vector2(200, 220), Color.White);
-            
+            // DEBUG CODE
+            string aimMode = Input.isAimingWithMouse ? "Mouse Aim" : "Keyboard aim";
+            spriteBatch.DrawString(debugTextFont, string.Format("Control: {3}\nAim: {0}\nMove: {1}\nOrientation: {2}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation, aimMode), new Vector2(50, 70), Color.DeepSkyBlue);
             // DEBUG CODE
 
             spriteBatch.End();
