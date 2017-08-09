@@ -47,7 +47,7 @@ namespace GeoWar
         {
             // need to consider changing this to use time instead of update cycles
             // eg velocity needs to be distance/second instead of distance per update cycle
-            const float speed = 500; // speed is the multiplier for the movement direction
+            const float speed = 520; // speed is the multiplier for the movement direction
             Velocity = (speed * (float)gameTime.ElapsedGameTime.TotalSeconds) * Input.GetMovementDirection(); // velocity is the final delta value to move the player from his current position to his new position between update cycles
             Position += Velocity;
             // this is a smart way to limit the movement of the ship to the inside of the screen extents
