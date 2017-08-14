@@ -24,7 +24,7 @@ namespace GeoWar
 
         // these are the keyboard controls for aiming, we need this list to track whether
         // or not the user is using them to aim or not
-        private static Keys[] keyboardAimKeys = new Keys[4] {Keys.Up, Keys.Down, Keys.Left, Keys.Right};
+        private static Keys[] keyboardAimKeys = new Keys[4] { Keys.Up, Keys.Down, Keys.Left, Keys.Right };
 
         // some storage for directions of movement and aiming
         private static Vector2 moveDirection;
