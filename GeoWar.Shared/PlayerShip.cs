@@ -77,7 +77,7 @@ namespace GeoWar
                 Quaternion aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle); // a quanternion is used for determining orientation in a 3D space and is required by the vector2 transform method
 
                 float randomSpread = rand.NextFloat(-0.3f, 0.3f); // generate some variability in the bullet angle to give it a machinegun effect
-                Vector2 bulletVelocity = MathUtil.FromPolar(aimAngle + randomSpread, 200f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
+                Vector2 bulletVelocity = MathUtil.FromPolar(aimAngle + randomSpread, 600f); // generate the velocity of the bullet based on the angle it leaves the ship at plus a magnitude for bullet speed
 
                 // the starting position of the bullet is the position of the player ship plus an offset of 25pix in the x axis  
                 // and 8 pix in the y axis but oriented in the aim direction of the player 
