@@ -26,7 +26,7 @@ namespace GeoWar
 
             // update the position of the bullet based on velocity each frame
             // consider doing this as pixels/second rather than pixels per frame
-            Position += Velocity;
+            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // check if the position of the bullet is off screen or not
             // if it is off screen, set IsExpired to true thus removing it from the entity list

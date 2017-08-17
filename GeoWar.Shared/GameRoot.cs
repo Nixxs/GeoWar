@@ -23,9 +23,9 @@ namespace GeoWar
 
             // here we define the screen
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 800;
+            //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
