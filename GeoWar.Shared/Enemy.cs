@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +12,7 @@ namespace GeoWar
         private float timeUntilStart = inactiveTime; //track how long the enemy has waited
         public bool _isActive;
         private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>(); // list for storing behviours
+        private Random rand = new Random();
 
         // track when an enemy can start moving
         public bool IsActive
@@ -104,6 +104,13 @@ namespace GeoWar
             return enemy;
         }
 
+        public static Enemy CreateWanderer(Vector2 position)
+        {
+            Enemy enemy = new Enemy(Art.Wanderer, position);
+            enemy.AddBehaviour(enemy.MoveRandomly());
+            return enemy;
+        }
+
         // the follow player behaviour
         IEnumerable<int> FollowPlayer(float acceleration)
         {
@@ -122,6 +129,40 @@ namespace GeoWar
             }
         }
 
+        // the random movement behaviour
+        IEnumerable<int> MoveRandomly()
+        {
+            float direction = rand.NextFloat(0, MathHelper.TwoPi);
 
+            while (true)
+            {
+                // set the direction initially after spawn then only run this once every 6 frames
+                direction += rand.NextFloat(-0.1f, 0.1f);
+                direction = MathHelper.WrapAngle(direction);
+
+                for (int i = 0; i < 6; i++)
+                {
+                    Velocity += MathUtil.FromPolar(direction, 70f);
+                    // the orientation for the wanderer doesn't matter because its a circle
+                    // all we are doing here is rotating it
+                    Orientation = Orientation - 0.05f;
+
+                    // set the bounds for the entity to move in to be the game bounds
+                    // minus the width and height of the enemy. doing it this way instead of doing the usual
+                    // vector2 clamp allows us to use the bounds.Contains method later to check if the enemy
+                    // has moved outside the bounds
+                    var bounds = GameRoot.Viewport.Bounds;
+                    bounds.Inflate(-image.Width, -image.Height);
+
+                    // if the enemy is outside the bounds, make it move away from the edge
+                    if (bounds.Contains(Position.ToPoint()) == false)
+                    {
+                        direction = (GameRoot.ScreenSize / 2 - Position).ToAngle() + rand.NextFloat(-MathHelper.PiOver2, MathHelper.PiOver2);
+                    }
+
+                    yield return 0;
+                }
+            }
+        }
     }
 }
