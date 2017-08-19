@@ -34,5 +34,12 @@ namespace GeoWar
             // max values then add the minvalue to get a number that lies within the 2 values
             return (float)rand.NextDouble() * (maxValue - minValue) + minValue;
         }
+
+        // scales a vector to a given length
+        public static Vector2 ScaleTo(this Vector2 vector, float length)
+        {
+            // multiplying the given vector by the fraction of it's length
+            return vector * (length / vector.Length());
+        }
     }
 }
