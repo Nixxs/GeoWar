@@ -70,6 +70,19 @@ namespace GeoWar
             IsExpired = true;
         }
 
+        // method for handling enemy to enemy collisions
+        // we want them to just bounce of each other
+        public void HandleCollision(Enemy other)
+        {
+            // the difference between the this vector and the other determines the direction that the
+            // enemy should bounce toward (away from the other)
+            Vector2 direction = Position - other.Position;
+            // as the distance between the two enemies increases after a collision we reduce the acceleration
+            // applied. As direction.lengthsquard gets larger as the two objects move away rom each other the
+            // acceleration applied gradually gets smaller too
+            Velocity += 10 * (direction / (direction.LengthSquared() + 1));
+        }
+
         // method for adding behaviours to the behaviour list
         private void AddBehaviour(IEnumerable<int> behaviour)
         {
@@ -142,7 +155,7 @@ namespace GeoWar
 
                 for (int i = 0; i < 6; i++)
                 {
-                    Velocity += MathUtil.FromPolar(direction, 70f);
+                    Velocity += MathUtil.FromPolar(direction, 10f);
                     // the orientation for the wanderer doesn't matter because its a circle
                     // all we are doing here is rotating it
                     Orientation = Orientation - 0.05f;

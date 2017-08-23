@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GeoWar
 {
@@ -11,6 +12,17 @@ namespace GeoWar
         const float shootCooldown = 120; //number of milli seconds between shots
         float cooldownRemaining = 0; // keep track of how many frames has past since last shot
         static Random rand = new Random(); // need this to generate random floats
+        float timeUntilRespawn = 0;
+        private bool _isDead;
+
+        // the player is dead if there is some time left on his repawn timer
+        public bool IsDead
+        {
+            get
+            {
+                return timeUntilRespawn > 0;
+            }
+        }
 
         // if the player instance property hasn't already been created then create one
         // and return that value, otherwise just return the object that had been assigned
@@ -43,8 +55,24 @@ namespace GeoWar
             Radius = 10;
         }
 
+        // if the player is killed set the respawn timer to 1 second
+        public void Kill()
+        {
+            timeUntilRespawn = 1000;
+        }
+
         public override void Update(GameTime gameTime)
         {
+            // if the player is dead subtract some time away from the respawn timer
+            // eventually the respawn time will get to 0 and the IsDead getter will return
+            // true. immediatly exit out of the players update loop after doing this since
+            // the player can't do anything when hes dead.
+            if (IsDead)
+            {
+                timeUntilRespawn -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                return;
+            }
+
             // need to consider changing this to use time instead of update cycles
             // eg velocity needs to be distance/second instead of distance per update cycle
             const float speed = 520; // speed is the multiplier for the movement direction
@@ -96,6 +124,17 @@ namespace GeoWar
             {
                 cooldownRemaining -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
+        }
+
+        // only draw the player if he is alive
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (IsDead == false)
+            {
+                // base.Draw is how you refer to the parent class's draw method
+                base.Draw(spriteBatch);
+            }
+            
         }
     }
 }

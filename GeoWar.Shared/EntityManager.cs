@@ -15,6 +15,10 @@ namespace GeoWar
     {
         // a list to store entity objects
         static List<Entity> entities = new List<Entity>();
+        // a list to store all currently active enemies for collision detection
+        static List<Enemy> enemies = new List<Enemy>();
+        // a list to store all currently active bullets for collision detection
+        static List<Bullet> bullets = new List<Bullet>();
 
         /// <summary>
         /// the isUpdating and addedEntities variables are used to handle the
@@ -44,6 +48,24 @@ namespace GeoWar
             }
         }
 
+        private static void AddEntity(Entity entity)
+        {
+            // add the entity to the general entities list this is to manage
+            // draw and update methods
+            entities.Add(entity);
+
+            // also add the entity to it's relevent list bullet or enemy so
+            // we can handle collision
+            if (entity is Bullet)
+            {
+                bullets.Add(entity as Bullet);
+            }
+            else if(entity is Enemy)
+            {
+                enemies.Add(entity as Enemy);
+            }
+        }
+
         /// <summary>
         /// If this method is called while the we are iterating through the list
         /// of entities (like in the update method) then it will throw an exception
@@ -55,11 +77,75 @@ namespace GeoWar
         {
             if (isUpdating == false)
             {
-                entities.Add(entity);
+                // use the add entity method to correctly add the entity to the required lists
+                AddEntity(entity);
             }
             else
             {
+                // add entity to the que
                 addedEntities.Add(entity);
+            }
+        }
+
+        private static bool IsColliding(Entity a, Entity b)
+        {
+            // find the sum of the two entities radiuses
+            float radius = a.Radius + b.Radius;
+            // return true if both entities are not expired (if they are expired they will disappear anyway) and
+            // who's sum of radiuses is less than the distance between them (thus overlapping) 
+            // we use distance squared here and square the radius in conjuction with this because it is faster to 
+            // compute than using just the actual distance
+            return (a.IsExpired == false) && (b.IsExpired == false) && (Vector2.DistanceSquared(a.Position, b.Position) < radius * radius);
+        }
+
+        static void HandleCollisions()
+        {
+            //handle collisions between enemies
+            // for each enemy in the enemies list
+            for (int enemyOneIndex = 0; enemyOneIndex < enemies.Count; enemyOneIndex++)
+            {
+                // compare it with all other enemies in the list starting with
+                // the next one along in the list. note we don't need to compare it with
+                // an enemy that is behind it in the list
+                for (int enemyTwoIndex = enemyOneIndex + 1; enemyTwoIndex < enemies.Count; enemyTwoIndex++)
+                {
+                    enemies[enemyOneIndex].HandleCollision(enemies[enemyTwoIndex]);
+                    enemies[enemyTwoIndex].HandleCollision(enemies[enemyOneIndex]);
+                }
+            }
+
+            // handle collisions between bullets and enemies
+            // for each enemy in the enemies list
+            for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
+            {
+                // compare it with every bullet in the bullets list
+                for (int bulletIndex = 0; bulletIndex < bullets.Count; bulletIndex++)
+                {
+                    // if the two entities have collided then execute the wasshot code for the enemy
+                    // and destroy the bullet
+                    if (IsColliding(enemies[enemyIndex], bullets[bulletIndex]))
+                    {
+                        enemies[enemyIndex].WasShot();
+                        bullets[bulletIndex].IsExpired = true;
+                    }
+                }
+            }
+
+            // handle collisions between the player and the enemy
+            // for each enemy in the enemies list
+            for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
+            {
+                // if the enemy is active and has collided with the player
+                if (enemies[enemyIndex].IsActive && IsColliding(PlayerShip.Instance, enemies[enemyIndex]))
+                {
+                    // run the kill method on the player to kill him
+                    PlayerShip.Instance.Kill();
+                    // this is a linq function that iterates through the list and runs the was shot 
+                    // method on all enemies in the enemies list to kill them off once the player dies
+                    enemies.ForEach(enemy => enemy.WasShot());
+                    // immediatly exit the loop once we find that the player is now dead
+                    break;
+                }
             }
         }
 
@@ -72,6 +158,9 @@ namespace GeoWar
             // set this to true as soon as we start running just before running through
             // the entities list to run all the update methods
             isUpdating = true;
+
+            // first handle all the collisions that might be happeneing between entities
+            HandleCollisions();
 
             // foreach can be used to read everything in a list but updating it 
             // while running through it should be done with a for loop only
@@ -88,7 +177,7 @@ namespace GeoWar
             // all the qued up, newly created entites to the entities list
             foreach (Entity entity in addedEntities)
             {
-                entities.Add(entity);
+                AddEntity(entity);
             }
             // empty out the addedEntities list since they have now been added to the
             // production entities list
@@ -101,6 +190,8 @@ namespace GeoWar
             // since these entities are no longer in the entities list, thier update
             // and draw methods will no longer be called, c# will automatically destroy them
             entities = entities.Where(entity => entity.IsExpired == false).ToList();
+            bullets = bullets.Where(bullet => bullet.IsExpired == false).ToList();
+            enemies = enemies.Where(enemy => enemy.IsExpired == false).ToList();
             // consider manually destroying these expired entity objects just for good
             // practice, rather than leaving it to the c# run time to do.
         }
