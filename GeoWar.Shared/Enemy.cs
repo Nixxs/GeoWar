@@ -72,7 +72,7 @@ namespace GeoWar
 
         // method for handling enemy to enemy collisions
         // we want them to just bounce of each other
-        public void HandleCollision(Enemy other)
+        public void HandleCollision(Enemy other, GameTime gameTime)
         {
             // the difference between the this vector and the other determines the direction that the
             // enemy should bounce toward (away from the other)
@@ -80,7 +80,7 @@ namespace GeoWar
             // as the distance between the two enemies increases after a collision we reduce the acceleration
             // applied. As direction.lengthsquard gets larger as the two objects move away rom each other the
             // acceleration applied gradually gets smaller too
-            Velocity += 10 * (direction / (direction.LengthSquared() + 1));
+            Velocity += 70000 * (direction / (direction.LengthSquared() + 1)) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         // method for adding behaviours to the behaviour list
@@ -107,31 +107,32 @@ namespace GeoWar
         }
 
         // a factory for creating seeker enemies
-        public static Enemy CreateSeeker(Vector2 position)
+        public static Enemy CreateSeeker(Vector2 position, GameTime gameTime)
         {
             // create the new enemy object
             Enemy enemy = new Enemy(Art.Seeker, position);
             // add the behaviour for a seeker
-            enemy.AddBehaviour(enemy.FollowPlayer(40f));
+            enemy.AddBehaviour(enemy.FollowPlayer(2800f, gameTime));
 
             return enemy;
         }
 
-        public static Enemy CreateWanderer(Vector2 position)
+        public static Enemy CreateWanderer(Vector2 position, GameTime gameTime)
         {
             Enemy enemy = new Enemy(Art.Wanderer, position);
-            enemy.AddBehaviour(enemy.MoveRandomly());
+            enemy.AddBehaviour(enemy.MoveRandomly(4000f, gameTime));
             return enemy;
         }
 
         // the follow player behaviour
-        IEnumerable<int> FollowPlayer(float acceleration)
+        IEnumerable<int> FollowPlayer(float acceleration, GameTime gameTime)
         {
             while (true)
             {
                 // get the vector for the ships position relative to the current postion
                 // then scale it down to the acceleration value 
-                Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration);
+                // need to normalize this increase in velocity by time as well so that it runs the same on all machine speeds
+                Velocity += (PlayerShip.Instance.Position - Position).ScaleTo(acceleration) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 // if the enemy is moving (ie its active, then orientate itself to point to the player/the
                 // direction it's moving in
                 if (Velocity != Vector2.Zero)
@@ -143,7 +144,7 @@ namespace GeoWar
         }
 
         // the random movement behaviour
-        IEnumerable<int> MoveRandomly()
+        IEnumerable<int> MoveRandomly(float speed, GameTime gameTime)
         {
             float direction = rand.NextFloat(0, MathHelper.TwoPi);
 
@@ -155,10 +156,10 @@ namespace GeoWar
 
                 for (int i = 0; i < 6; i++)
                 {
-                    Velocity += MathUtil.FromPolar(direction, 50f);
+                    Velocity += MathUtil.FromPolar(direction, speed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     // the orientation for the wanderer doesn't matter because its a circle
                     // all we are doing here is rotating it
-                    Orientation = Orientation - 0.05f;
+                    Orientation -= 6f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // set the bounds for the entity to move in to be the game bounds
                     // minus the width and height of the enemy. doing it this way instead of doing the usual

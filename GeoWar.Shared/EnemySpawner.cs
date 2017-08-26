@@ -25,11 +25,11 @@ namespace GeoWar
                 // get a random number from 0 to the inverseSpawnChance number if that number is 0 spawn an enemy
                 if (rand.Next((int)inverseSpawnchance) == 0)
                 {
-                    EntityManager.Add(Enemy.CreateSeeker(GetSpawnPosition()));
+                    EntityManager.Add(Enemy.CreateSeeker(GetSpawnPosition(), gameTime));
                 }
                 if (rand.Next((int)inverseSpawnchance) == 0)
                 {
-                    EntityManager.Add(Enemy.CreateWanderer(GetSpawnPosition()));
+                    EntityManager.Add(Enemy.CreateWanderer(GetSpawnPosition(), gameTime));
                 }
             }
 

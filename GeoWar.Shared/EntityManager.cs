@@ -98,7 +98,7 @@ namespace GeoWar
             return (a.IsExpired == false) && (b.IsExpired == false) && (Vector2.DistanceSquared(a.Position, b.Position) < radius * radius);
         }
 
-        static void HandleCollisions()
+        static void HandleCollisions(GameTime gameTime)
         {
             //handle collisions between enemies
             // for each enemy in the enemies list
@@ -111,8 +111,8 @@ namespace GeoWar
                 {
                     if (IsColliding(enemies[enemyOneIndex], enemies[enemyTwoIndex]))
                     {
-                        enemies[enemyOneIndex].HandleCollision(enemies[enemyTwoIndex]);
-                        enemies[enemyTwoIndex].HandleCollision(enemies[enemyOneIndex]);
+                        enemies[enemyOneIndex].HandleCollision(enemies[enemyTwoIndex], gameTime);
+                        enemies[enemyTwoIndex].HandleCollision(enemies[enemyOneIndex], gameTime);
                     }
                 }
             }
@@ -163,7 +163,7 @@ namespace GeoWar
             isUpdating = true;
 
             // first handle all the collisions that might be happeneing between entities
-            HandleCollisions();
+            HandleCollisions(gameTime);
 
             // foreach can be used to read everything in a list but updating it 
             // while running through it should be done with a for loop only

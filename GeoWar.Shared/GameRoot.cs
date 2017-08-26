@@ -72,10 +72,6 @@ namespace GeoWar
 
             // all other initializations come after base
             EntityManager.Add(PlayerShip.Instance);
-
-            // #### START DEBUG ####
-            EntityManager.Add(Enemy.CreateWanderer(new Vector2(200,200)));
-            // #### END DEBUG  ####
         }
 
         /// <summary>
