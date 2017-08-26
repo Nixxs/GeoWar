@@ -109,8 +109,11 @@ namespace GeoWar
                 // an enemy that is behind it in the list
                 for (int enemyTwoIndex = enemyOneIndex + 1; enemyTwoIndex < enemies.Count; enemyTwoIndex++)
                 {
-                    enemies[enemyOneIndex].HandleCollision(enemies[enemyTwoIndex]);
-                    enemies[enemyTwoIndex].HandleCollision(enemies[enemyOneIndex]);
+                    if (IsColliding(enemies[enemyOneIndex], enemies[enemyTwoIndex]))
+                    {
+                        enemies[enemyOneIndex].HandleCollision(enemies[enemyTwoIndex]);
+                        enemies[enemyTwoIndex].HandleCollision(enemies[enemyOneIndex]);
+                    }
                 }
             }
 
