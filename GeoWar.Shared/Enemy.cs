@@ -8,7 +8,7 @@ namespace GeoWar
 {
     class Enemy : Entity
     {
-        private const float inactiveTime = 1500f; // time before enemy can start moving
+        private const float inactiveTime = 500; // time before enemy can start moving
         private float timeUntilStart = inactiveTime; //track how long the enemy has waited
         public bool _isActive;
         private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>(); // list for storing behviours
@@ -155,7 +155,7 @@ namespace GeoWar
 
                 for (int i = 0; i < 6; i++)
                 {
-                    Velocity += MathUtil.FromPolar(direction, 10f);
+                    Velocity += MathUtil.FromPolar(direction, 50f);
                     // the orientation for the wanderer doesn't matter because its a circle
                     // all we are doing here is rotating it
                     Orientation = Orientation - 0.05f;

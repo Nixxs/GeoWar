@@ -9,7 +9,7 @@ namespace GeoWar
     class PlayerShip : Entity
     {
         private static PlayerShip _instance;
-        const float shootCooldown = 120; //number of milli seconds between shots
+        const float shootCooldown = 200; //number of milli seconds between shots
         float cooldownRemaining = 0; // keep track of how many frames has past since last shot
         static Random rand = new Random(); // need this to generate random floats
         float timeUntilRespawn = 0;
@@ -59,6 +59,7 @@ namespace GeoWar
         public void Kill()
         {
             timeUntilRespawn = 1000;
+            EnemySpawner.Reset();
         }
 
         public override void Update(GameTime gameTime)

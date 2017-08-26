@@ -113,6 +113,7 @@ namespace GeoWar
         {
             Input.Update();
             EntityManager.Update(gameTime);
+            EnemySpawner.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -140,7 +141,7 @@ namespace GeoWar
 
             // DEBUG CODE
             string aimMode = Input.isAimingWithMouse ? "Mouse Aim" : "Keyboard aim";
-            spriteBatch.DrawString(debugTextFont, string.Format("Control: {3}\nAim: {0}\nMove: {1}\nOrientation: {2}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation, aimMode), new Vector2(50, 70), Color.DeepSkyBlue);
+            spriteBatch.DrawString(debugTextFont, string.Format("Control: {3}\nAim: {0}\nMove: {1}\nOrientation: {2}\nSpawn Chance: 1 in {4}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation, aimMode, EnemySpawner.inverseSpawnchance), new Vector2(50, 70), Color.DeepSkyBlue);
             // DEBUG CODE
 
             spriteBatch.End();
