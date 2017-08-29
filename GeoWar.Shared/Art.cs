@@ -14,6 +14,7 @@ namespace GeoWar
         private static Texture2D _wanderer;
         private static Texture2D _bullet;
         private static Texture2D _pointer;
+        private static SpriteFont _font;
 
         /// <summary>
         /// A helpful and tidy load method to load all the textures from a one line
@@ -27,6 +28,7 @@ namespace GeoWar
             _wanderer = instance.Content.Load<Texture2D>("Art\\Wanderer");
             _bullet = instance.Content.Load<Texture2D>("Art\\Bullet");
             _pointer = instance.Content.Load<Texture2D>("Art\\Pointer");
+            _font = instance.Content.Load<SpriteFont>("Font");
         }
 
         public static Texture2D Player
@@ -52,6 +54,11 @@ namespace GeoWar
         public static Texture2D Pointer
         {
             get { return _pointer; }
+        }
+
+        public static SpriteFont Font
+        {
+            get { return _font; }
         }
     }
 }

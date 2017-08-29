@@ -13,6 +13,19 @@ namespace GeoWar
         public bool _isActive;
         private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>(); // list for storing behviours
         private Random rand = new Random();
+        public int _pointValue;
+
+        public int PointValue
+        {
+            get
+            {
+                return _pointValue;
+            }
+            private set
+            {
+                _pointValue = value;
+            }
+        }
 
         // track when an enemy can start moving
         public bool IsActive
@@ -23,10 +36,11 @@ namespace GeoWar
             }
         }
 
-        public Enemy(Texture2D image, Vector2 position)
+        public Enemy(Texture2D image, Vector2 position, int points)
         {
             this.image = image;
             Position = position;
+            PointValue = points;
             Radius = image.Width / 2f;
             // this is transparent and not white so enemys start invisibile and will fade in
             // gradually until the IsActive switch returns true
@@ -67,7 +81,11 @@ namespace GeoWar
         // when this is run, it will kill off the enemy
         public void WasShot()
         {
+            // expire the enemy since it was shot
             IsExpired = true;
+            // the player has shot this enemy so increase the players multiplier and add points to the score
+            PlayerStatus.IncreaseMultiplier();
+            PlayerStatus.AddPoints(PointValue);
         }
 
         // method for handling enemy to enemy collisions
@@ -109,8 +127,8 @@ namespace GeoWar
         // a factory for creating seeker enemies
         public static Enemy CreateSeeker(Vector2 position, GameTime gameTime)
         {
-            // create the new enemy object
-            Enemy enemy = new Enemy(Art.Seeker, position);
+            // create the new enemy object initialize it with starting position and point value
+            Enemy enemy = new Enemy(Art.Seeker, position, 2);
             // add the behaviour for a seeker
             enemy.AddBehaviour(enemy.FollowPlayer(2800f, gameTime));
 
@@ -119,7 +137,7 @@ namespace GeoWar
 
         public static Enemy CreateWanderer(Vector2 position, GameTime gameTime)
         {
-            Enemy enemy = new Enemy(Art.Wanderer, position);
+            Enemy enemy = new Enemy(Art.Wanderer, position, 1);
             enemy.AddBehaviour(enemy.MoveRandomly(4000f, gameTime));
             return enemy;
         }

@@ -23,9 +23,9 @@ namespace GeoWar
 
             // here we define the screen
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 600;
-            graphics.PreferredBackBufferWidth = 800;
-            //graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -110,8 +110,17 @@ namespace GeoWar
             Input.Update();
             EntityManager.Update(gameTime);
             EnemySpawner.Update(gameTime);
+            PlayerStatus.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        private void DrawRightAlignedString(string text, float y)
+        {
+            // this gets the width of the string in pixels
+            float textWidth = Art.Font.MeasureString(text).X;
+            // draws the string on the top right side of the screen 5 pixels from the right side
+            spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5, y), Color.White);
         }
 
         /// <summary>
@@ -129,6 +138,11 @@ namespace GeoWar
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
 
+            // draw the players lives on the top left of the screen 5,5
+            spriteBatch.DrawString(Art.Font, string.Format("Lives: {0}", PlayerStatus.Lives), new Vector2(5), Color.White);
+            DrawRightAlignedString(string.Format("Score: {0}", PlayerStatus.Score), 5);
+            DrawRightAlignedString(string.Format("Multiplier: X{0}", PlayerStatus.Multiplier), 35);
+
             // draw the mouse pointer if the player is aiming with the mouse
             if (Input.isAimingWithMouse == true)
             {
@@ -137,7 +151,7 @@ namespace GeoWar
 
             // DEBUG CODE
             string aimMode = Input.isAimingWithMouse ? "Mouse Aim" : "Keyboard aim";
-            spriteBatch.DrawString(debugTextFont, string.Format("Control: {3}\nAim: {0}\nMove: {1}\nOrientation: {2}\nSpawn Chance: 1 in {4}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation, aimMode, EnemySpawner.inverseSpawnchance), new Vector2(50, 70), Color.DeepSkyBlue);
+            //spriteBatch.DrawString(debugTextFont, string.Format("Control: {3}\nAim: {0}\nMove: {1}\nOrientation: {2}\nSpawn Chance: 1 in {4}", Input.GetAimDirection(),  Input.GetMovementDirection(), PlayerShip.Instance.Orientation, aimMode, EnemySpawner.inverseSpawnchance), new Vector2(50, 70), Color.DeepSkyBlue);
             // DEBUG CODE
 
             spriteBatch.End();

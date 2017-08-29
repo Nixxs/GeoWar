@@ -59,6 +59,14 @@ namespace GeoWar
         public void Kill()
         {
             timeUntilRespawn = 1000;
+            // remove a life from the player
+            PlayerStatus.RemoveLife();
+            // if the player has lost all his lives reset the game
+            if (PlayerStatus.Lives < 1)
+            {
+                PlayerStatus.Reset();
+            }
+            // reset the enemy spawner
             EnemySpawner.Reset();
         }
 
