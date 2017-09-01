@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GeoWar
 {
@@ -61,20 +62,16 @@ namespace GeoWar
             // remove a life from the player
             PlayerStatus.RemoveLife();
 
-            // the player is in a game over state (0 lives) prevent him from respawning
-            // so that he can see the score
-            if (PlayerStatus.IsGameOver)
-            {
-                timeUntilRespawn = 5000;
-            }
-            else
-            {
-                timeUntilRespawn = 1000;
-            }
-
+            // turn on the game over state if the player has 0 lives
             if (PlayerStatus.Lives < 1)
             {
-                PlayerStatus.Reset();
+                PlayerStatus.IsGameOver = true;
+            }
+
+            // if player has died but is not in game over state then make him wait for 1s
+            if (!PlayerStatus.IsGameOver)
+            {
+                timeUntilRespawn = 1000;
             }
 
             // reset the enemy spawner
@@ -83,6 +80,23 @@ namespace GeoWar
 
         public override void Update(GameTime gameTime)
         {
+            // if the game is in a game over state, don't do anything just wait until the player presses
+            // A or Enter before continuing on with a new game
+            if (PlayerStatus.IsGameOver)
+            {
+                // this is the time before the player with spawn again into a new game after he presses the A
+                // button or the enter key aftter a game over screen
+                timeUntilRespawn = 250;
+                if (Input.WasButtonPressed(Buttons.A) || Input.WasKeyPressed(Keys.Enter))
+                {
+                    // set the game over switch to false and reset all the player stats to start a new game
+                    PlayerStatus.IsGameOver = false;
+                    PlayerStatus.Reset();
+                }
+                // keep exiting the update loop immediately since the player is in a game over state
+                return;
+            }
+
             // if the player is dead subtract some time away from the respawn timer
             // eventually the respawn time will get to 0 and the IsDead getter will return
             // true. immediatly exit out of the players update loop after doing this since

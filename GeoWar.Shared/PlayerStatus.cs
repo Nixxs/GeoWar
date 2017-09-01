@@ -16,6 +16,7 @@ namespace GeoWar
         private static int _lives;
         private static int _score;
         private static int _multiplier;
+        private static bool _isGameOver;
         
         // the multiplyer expires after a certain time so we need to keep track of how much time is 
         // left before we expire it back to 1
@@ -68,7 +69,12 @@ namespace GeoWar
         {
             get
             {
-                return Lives == 0;
+                return _isGameOver;
+
+            }
+            set
+            {
+                _isGameOver = value;
             }
         }
 
