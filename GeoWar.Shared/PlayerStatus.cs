@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace GeoWar
@@ -9,11 +10,13 @@ namespace GeoWar
     {
         private const float multiplierExpiryTime = 1f;
         private const int maxMultiplier = 20;
+        public const string highScoreFilename = "highscore.txt";
+        public static int HighScore;
 
-        public static int _lives;
-        public static int _score;
-        public static int _multiplier;
-
+        private static int _lives;
+        private static int _score;
+        private static int _multiplier;
+        
         // the multiplyer expires after a certain time so we need to keep track of how much time is 
         // left before we expire it back to 1
         private static float multiplierTimeLeft;
@@ -60,20 +63,72 @@ namespace GeoWar
             }
         }
 
+        // if the player has 0 lives then game over returns true
+        public static bool IsGameOver
+        {
+            get
+            {
+                return Lives == 0;
+            }
+        }
+
         // the the reset method on construction
         static PlayerStatus()
         {
+            // load the previously recorded high score at start up
+            HighScore = LoadHighScore();
             Reset();
         }
 
         // the reset method sets all the values back to the start
         public static void Reset()
         {
+            // before resetting the score upon gameover record the current score to 
+            // the high score storage area if it is higher than the current high score
+            if (Score > HighScore)
+            {
+                SaveHighScore(Score);
+                HighScore = Score;
+            }
+
             Score = 0;
             Multiplier = 1;
-            Lives = 4;
+            Lives = 3;
             scoreForExtraLife = 2000;
             multiplierTimeLeft = 0;
+        }
+
+        /// <summary>
+        /// returns the current high score
+        /// </summary>
+        /// <returns></returns>
+        private static int LoadHighScore()
+        {
+            int score;
+
+            // check if the highscorefile exists, if it exists then try to parse it as an int and return the value
+            // of it and store it into the score variable
+            if (File.Exists(highScoreFilename) && int.TryParse(File.ReadAllText(highScoreFilename), out score))
+            {
+                // return the high score
+                return score;
+            }
+            else
+            {
+                // no file was found or it was not possible to parse it as an int so the high score that is returned
+                // is just 0
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// records the current high score
+        /// </summary>
+        /// <param name="score"></param>
+        private static void SaveHighScore(int score)
+        {
+            // write the current "score" value to the high score file
+            File.WriteAllText(highScoreFilename, score.ToString());
         }
 
         public static void Update(GameTime gameTime)

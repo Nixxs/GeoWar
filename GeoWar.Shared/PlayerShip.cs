@@ -13,7 +13,6 @@ namespace GeoWar
         float cooldownRemaining = 0; // keep track of how many frames has past since last shot
         static Random rand = new Random(); // need this to generate random floats
         float timeUntilRespawn = 0;
-        private bool _isDead;
 
         // the player is dead if there is some time left on his repawn timer
         public bool IsDead
@@ -58,14 +57,26 @@ namespace GeoWar
         // if the player is killed set the respawn timer to 1 second
         public void Kill()
         {
-            timeUntilRespawn = 1000;
+            
             // remove a life from the player
             PlayerStatus.RemoveLife();
-            // if the player has lost all his lives reset the game
+
+            // the player is in a game over state (0 lives) prevent him from respawning
+            // so that he can see the score
+            if (PlayerStatus.IsGameOver)
+            {
+                timeUntilRespawn = 5000;
+            }
+            else
+            {
+                timeUntilRespawn = 1000;
+            }
+
             if (PlayerStatus.Lives < 1)
             {
                 PlayerStatus.Reset();
             }
+
             // reset the enemy spawner
             EnemySpawner.Reset();
         }

@@ -138,6 +138,17 @@ namespace GeoWar
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             EntityManager.Draw(spriteBatch);
 
+            // if the player is in a game over state display the score in the middle of the screen
+            if (PlayerStatus.IsGameOver)
+            {
+                string gameOverText = string.Format("Game Over\nYour Score: {0}\nHigh Score: {1}", PlayerStatus.Score, PlayerStatus.HighScore);
+                Vector2 textSize = Art.Font.MeasureString(gameOverText);
+                // this is using vector math to find the centre of the screen and position the text right in
+                // the middle of it textSize/2 get the middle of the text screensize/2 gets the middle of the
+                // screen
+                spriteBatch.DrawString(Art.Font, gameOverText, ScreenSize / 2 - textSize / 2, Color.White);
+            }
+
             // draw the players lives on the top left of the screen 5,5
             spriteBatch.DrawString(Art.Font, string.Format("Lives: {0}", PlayerStatus.Lives), new Vector2(5), Color.White);
             DrawRightAlignedString(string.Format("Score: {0}", PlayerStatus.Score), 5);
