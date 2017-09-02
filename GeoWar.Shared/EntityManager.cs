@@ -87,6 +87,13 @@ namespace GeoWar
             }
         }
 
+        public static void ClearEnemies()
+        {
+            // this is a linq function that iterates through the list and runs the was shot 
+            // method on all enemies in the enemies list to kill them off
+            enemies.ForEach(enemy => enemy.WasShot());
+        }
+
         private static bool IsColliding(Entity a, Entity b)
         {
             // find the sum of the two entities radiuses
@@ -139,13 +146,12 @@ namespace GeoWar
             for (int enemyIndex = 0; enemyIndex < enemies.Count; enemyIndex++)
             {
                 // if the enemy is active and has collided with the player
-                if (enemies[enemyIndex].IsActive && IsColliding(PlayerShip.Instance, enemies[enemyIndex]))
+                if (enemies[enemyIndex].IsActive && IsColliding(PlayerShip.Instance, enemies[enemyIndex]) && !PlayerStatus.IsGameOver)
                 {
                     // run the kill method on the player to kill him
                     PlayerShip.Instance.Kill();
-                    // this is a linq function that iterates through the list and runs the was shot 
-                    // method on all enemies in the enemies list to kill them off once the player dies
-                    enemies.ForEach(enemy => enemy.WasShot());
+                    // kill all the enemies off when the player dies
+                    ClearEnemies();
                     // immediatly exit the loop once we find that the player is now dead
                     break;
                 }

@@ -17,13 +17,13 @@ namespace GeoWar
 
             // if the player is alive and there are less than 200 entities on the screen
             // do this spawn roll every 100millis seconds
-            if (PlayerShip.Instance.IsDead == false && EntityManager.Count < 200 && timeSinceLastSpawnRoll > spawnFrequency)
+            if ((PlayerShip.Instance.IsDead == false || PlayerStatus.IsGameOver == true) && EntityManager.Count < 200 && timeSinceLastSpawnRoll > spawnFrequency)
             {
                 // reset this back to 0 because we are rolling the spawn now
                 timeSinceLastSpawnRoll = 0;
 
                 // get a random number from 0 to the inverseSpawnChance number if that number is 0 spawn an enemy
-                if (rand.Next((int)inverseSpawnchance) == 0)
+                if (rand.Next((int)inverseSpawnchance) == 0 && PlayerStatus.IsGameOver == false)
                 {
                     EntityManager.Add(Enemy.CreateSeeker(GetSpawnPosition(), gameTime));
                 }
