@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-#if LINUX || MACOS || WINDOWSGL || WINDOWS
-    // Do nothing
-#else
-    // UWP
+#if WINDOWS_UAP
     using Windows.Storage;
 #endif
 
@@ -19,11 +16,10 @@ namespace GeoWar
         private const int maxMultiplier = 20;
         public static int HighScore;
 
-        #if LINUX || MACOS || WINDOWSGL || WINDOWS
-            public static string highScoreFilename = "highscore.txt";
-        #else
-            // UWP
+        #if WINDOWS_UAP
             public static string highScoreFilename = string.Format("{0}\\{1}", ApplicationData.Current.LocalFolder.Path, "highscore.txt");
+        #else
+            public static string highScoreFilename = "highscore.txt";
         #endif
 
         private static int _lives;
