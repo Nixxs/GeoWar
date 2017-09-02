@@ -4,14 +4,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+#if LINUX || MACOS || WINDOWSGL || WINDOWS
+    // Do nothing
+#else
+    // UWP
+    using Windows.Storage;
+#endif
+
 namespace GeoWar
 {
     static class PlayerStatus
     {
         private const float multiplierExpiryTime = 1f;
         private const int maxMultiplier = 20;
-        public const string highScoreFilename = "highscore.txt";
         public static int HighScore;
+
+        #if LINUX || MACOS || WINDOWSGL || WINDOWS
+            public static string highScoreFilename = "highscore.txt";
+        #else
+            // UWP
+            public static string highScoreFilename = string.Format("{0}\\{1}", ApplicationData.Current.LocalFolder.Path, "highscore.txt");
+        #endif
 
         private static int _lives;
         private static int _score;
@@ -99,7 +112,7 @@ namespace GeoWar
 
             Score = 0;
             Multiplier = 1;
-            Lives = 3;
+            Lives = 2;
             scoreForExtraLife = 2000;
             multiplierTimeLeft = 0;
         }
