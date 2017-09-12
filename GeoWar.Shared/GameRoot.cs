@@ -123,12 +123,14 @@ namespace GeoWar
             base.Update(gameTime);
         }
 
+        int tvScreenAdjustment = 30;
+
         private void DrawRightAlignedString(string text, float y)
         {
             // this gets the width of the string in pixels
             float textWidth = Art.Font.MeasureString(text).X;
             // draws the string on the top right side of the screen 5 pixels from the right side
-            spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5, y), Color.White);
+            spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 15 - tvScreenAdjustment, y + tvScreenAdjustment), Color.White);
         }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace GeoWar
             }
 
             // draw the players lives on the top left of the screen 5,5
-            spriteBatch.DrawString(Art.Font, string.Format("Lives: {0}", PlayerStatus.Lives), new Vector2(5), Color.White);
+            spriteBatch.DrawString(Art.Font, string.Format("Lives: {0}", PlayerStatus.Lives), new Vector2(10 + tvScreenAdjustment, 5 + tvScreenAdjustment), Color.White);
             DrawRightAlignedString(string.Format("Score: {0}", PlayerStatus.Score), 5);
             DrawRightAlignedString(string.Format("Multiplier: X{0}", PlayerStatus.Multiplier), 35);
 
