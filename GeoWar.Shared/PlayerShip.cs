@@ -92,6 +92,7 @@ namespace GeoWar
                     // set the game over switch to false and reset all the player stats to start a new game
                     PlayerStatus.IsGameOver = false;
                     EntityManager.ClearEnemies();
+                    EnemySpawner.Reset();
                     PlayerStatus.Reset();
                 }
                 // keep exiting the update loop immediately since the player is in a game over state
