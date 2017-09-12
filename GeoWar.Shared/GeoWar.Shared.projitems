@@ -21,5 +21,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MathUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlayerShip.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlayerStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sound.cs" />
   </ItemGroup>
 </Project>

@@ -152,6 +152,10 @@ namespace GeoWar
 
                 offset = Vector2.Transform(new Vector2(25, -8), aimQuat);
                 EntityManager.Add(new Bullet(Position + offset, bulletVelocity));
+
+                // play a sound for shooting bullets!
+                // add some variability to the pitch on each play
+                Sound.Shot.Play(0.2f, rand.NextFloat(-0.2f, 0.2f), 0);
             }
 
             // reduce the cooldown remaining by 1 frame

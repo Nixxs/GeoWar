@@ -10,7 +10,6 @@ namespace GeoWar
     {
         private const float inactiveTime = 500; // time before enemy can start moving
         private float timeUntilStart = inactiveTime; //track how long the enemy has waited
-        public bool _isActive;
         private List<IEnumerator<int>> behaviours = new List<IEnumerator<int>>(); // list for storing behviours
         private Random rand = new Random();
         public int _pointValue;
@@ -86,6 +85,10 @@ namespace GeoWar
             // the player has shot this enemy so increase the players multiplier and add points to the score
             PlayerStatus.IncreaseMultiplier();
             PlayerStatus.AddPoints(PointValue);
+
+            // play and explosion sound
+            // add some variblity to the explosion sound and randomly chaning pitch
+            Sound.Explosion.Play(0.2f, rand.NextFloat(-0.2f, 0.2f), 0);
         }
 
         // method for handling enemy to enemy collisions

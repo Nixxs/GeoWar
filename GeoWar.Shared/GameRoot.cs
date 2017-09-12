@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace GeoWar
 {
@@ -72,6 +73,12 @@ namespace GeoWar
 
             // all other initializations come after base
             EntityManager.Add(PlayerShip.Instance);
+
+            // set the music to repeating
+            MediaPlayer.IsRepeating = true;
+            // play the music defined in the sound class
+            MediaPlayer.Play(Sound.Music);
+
         }
 
         /// <summary>
@@ -85,6 +92,7 @@ namespace GeoWar
 
             // TODO: use this.Content to load your game content here
             Art.Load(Instance);
+            Sound.Load(Instance.Content);
 
             // DEBUG CODE
             debugTextFont = Content.Load<SpriteFont>("debugText");
